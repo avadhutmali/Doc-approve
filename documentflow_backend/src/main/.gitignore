@@ -1,0 +1,19 @@
+# Java
+*.class
+*.jar
+*.war
+*.log
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+target/
+
+# OS
+.DS_Store
+
+# Spring
+application.properties
