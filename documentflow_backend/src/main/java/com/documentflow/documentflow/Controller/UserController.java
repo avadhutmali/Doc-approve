@@ -3,7 +3,6 @@ package com.documentflow.documentflow.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.documentflow.documentflow.Entity.User;
-import com.documentflow.documentflow.Repository.UserRepository;
 import com.documentflow.documentflow.Service.UserService;
 
 import org.springframework.http.HttpStatus;
@@ -13,9 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
 
 @RestController
 @RequestMapping("/api/users")
