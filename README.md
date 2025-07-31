@@ -1,29 +1,33 @@
 
 # DocApprove 🧾✅
 
-**DocApprove** is an online document verification portal that allows authorized users to upload, approve, and track the status of submitted documents securely.
+**DocApprove** is an online document verification portal that allows authorized users to upload, review, and track the status of submitted documents securely using JWT-based authentication.
 
-> 🚧 This project is currently under development.
+> 🚧 This project is under active development.
 
 ---
 
 ## 📁 Project Structure
 
-- `Entity/` – JPA entity classes (e.g. User, Document, Review)
+- `Entity/` – JPA entity classes (`User`, `Document`, `Review`)
 - `Repository/` – Spring Data JPA interfaces
-- `Service/` – Business logic layer
-- `Controller/` – REST APIs
+- `Service/` – Business logic layer (User, Document, Review services)
+- `Controller/` – REST APIs for user registration, authentication, and document workflow
+- `Security/` – JWT token-based Spring Security configuration
 - `resources/` – `application.properties`, static files
 
 ---
 
-## 🚀 Features (Planned)
+## 🚀 Features
 
-- ✅ User registration & role-based authentication
+- ✅ JWT-based user authentication
+- ✅ Secure registration & login endpoints
+- 🔐 Token validation filter for protected routes
 - 🗂️ Upload and manage documents
-- 👮 Admin & reviewer roles for verification workflow
-- 🧾 Approval logs & status tracking
-- 📊 Dashboard for document analytics (future)
+- 🧑‍💼 Review workflow with comments and decisions
+- 📜 Approval logs & status tracking
+- 📊 Dashboard for analytics (Planned)
+- 🧑‍⚖️ Role-based access control (Coming Soon)
 
 ---
 
@@ -31,50 +35,71 @@
 
 - Java 17  
 - Spring Boot 3.5.x  
-- Spring Security  
+- Spring Security (with JWT)  
 - MySQL  
 - Maven  
-- (Planned) React.js for frontend
+- (Planned) React.js frontend
 
 ---
 
-## ⚙️ Setup (for dev)
+## ⚙️ Setup (for Development)
 
-1. Clone the repo:
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/your-username/doc-approve.git
+   cd doc-approve
    ```
-2. Configure your `application.properties`:
+
+2. **Configure your MySQL database in `application.properties`:**
    ```properties
    spring.datasource.url=jdbc:mysql://localhost:3306/documentflow
    spring.datasource.username=root
    spring.datasource.password=your-password
    ```
-3. Run the app:
+
+3. **Run the application:**
    ```bash
    ./mvnw spring-boot:run
    ```
 
 ---
 
+## 🔑 Authentication Flow
+
+- **Register:** `POST /register`  
+  Registers a new user (password is securely encoded)
+
+- **Login:** `POST /login`  
+  Returns a JWT token upon valid credentials
+
+- **Protected Endpoints:**  
+  Pass token as Bearer in `Authorization` header:
+  ```
+  Authorization: Bearer <your-jwt-token>
+  ```
+
+---
+
 ## 📌 Current Status
 
-- [x] User entity + basic auth via Spring Security  
-- [x] JPA setup with MySQL  
-- [ ] File upload & document entity  
+- [x] User entity with encoded password storage  
+- [x] JWT token generation & validation  
+- [x] Security filter chain + auth entrypoint  
+- [x] Document entity & basic upload logic  
+- [ ] Role-based access (in progress)  
 - [ ] Reviewer dashboard  
-- [ ] Frontend integration  
-- [ ] End-to-end flow
+- [ ] File storage & download  
+- [ ] Frontend (React.js) integration
 
 ---
 
 ## 👤 Author
 
-**Avdhut Mali**   
+**Avdhut Mali**  
 [GitHub](https://github.com/avadhutmali)
 
 ---
 
 ## 📜 License
 
-MIT License (or choose your preferred license)
+MIT License (or your preferred license)
