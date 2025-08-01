@@ -24,14 +24,13 @@ public class UserController {
     }
     
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
         try {
             userService.RegisterUser(user);
+            return ResponseEntity.ok("User Registered Succesfully");
         } catch (Exception e) {
-            return "Username Already Exit";
+            return ResponseEntity.badRequest().body("Username Already Exit");
         }
-
-        return "User Saved Succesfully"; 
     }
 
     @GetMapping("/{username}")

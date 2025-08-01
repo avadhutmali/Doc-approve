@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -20,12 +22,19 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    public String generateToken(String userName,List<String> roles){
+    public String generateToken(UserDetails userDetails){
+
+        String role = userDetails.getAuthorities()
+                        .stream()
+                        .findFirst()
+                        .map(GrantedAuthority::getAuthority)
+                        .orElse("USER");
+
         return Jwts
                 .builder()
                 .signWith(getSignKey())
-                .claim("roles", roles)
-                .setSubject(userName)
+                .claim("role", role)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+EXPIRATION_MS))
                 .compact();
@@ -36,9 +45,9 @@ public class JwtUtil {
 
     }
 
-    public List<String> extractRoles(String token){
+    public String extractRoles(String token){
         Claims claims = extractAllClaims(token);
-        return claims.get("roles",List.class);
+        return claims.get("role",String.class);
     }
 
     public boolean isTokenValid(String token,String userName){
