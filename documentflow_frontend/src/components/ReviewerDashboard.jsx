@@ -1,19 +1,30 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function ReviewerDashboard() {
   const [pending, setPending] = useState([])
+    const [username, setUsername] = useState('')
+    const navigate = useNavigate()
 
   useEffect(() => {
-    axios.get('http://localhost:8081/api/review/pending', {
+      const token = localStorage.getItem('token')
+      if (!token) return navigate('/login')
+      const { sub } = jwt_decode(token)
+      setUsername(sub)
+    }, [navigate])
+
+  useEffect(() => {
+    axios.get('http://localhost:8081/api/documents/pending', {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     }).then(res => setPending(res.data))
   }, [])
 
   const handleDecision = (id, decision) => {
-    axios.post(`http://localhost:8081/api/review/${decision.toLowerCase()}`, 
-      { documentId: id },
-      { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
+    axios.post(`http://localhost:8081/api/reviews/${decision.toLowerCase()}/${id}`,
+      { userName:username,comment:"testing" },
+      { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
     ).then(() => setPending(p => p.filter(d => d.documentId !== id)))
   }
 

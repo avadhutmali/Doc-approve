@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.documentflow.documentflow.Entity.Document;
-import com.documentflow.documentflow.Entity.User;
 import com.documentflow.documentflow.Entity.Enums.DocumentStatus;
+import com.documentflow.documentflow.Entity.User;
 import com.documentflow.documentflow.Repository.DocumentRepository;
 import com.documentflow.documentflow.Repository.UserRepository;
 
@@ -16,8 +16,8 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class DocumentService {
-    private UserRepository userRepository;
-    private DocumentRepository documentRepository;
+    private final UserRepository userRepository;
+    private final DocumentRepository documentRepository;
 
     public Document uploaDocument(String title,String description,String fileUrl,String userName){
         User user = userRepository.findByUserName(userName).orElseThrow(()-> new EntityNotFoundException("User Not Found"));

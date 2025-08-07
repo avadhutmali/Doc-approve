@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.documentflow.documentflow.Entity.Enums.ReviewDecision;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,6 +41,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "document_id", nullable = false)
+    @JsonBackReference
     private Document document;
 
     @ManyToOne()

@@ -20,7 +20,7 @@ export default function Dashboard() {
     <Layout>
       {role === 'USER' && <UserDashboard />}
       {role === 'REVIEWER' && <ReviewerDashboard />}
-      {role === 'ADMIN' && <AdminDashboard />}
+      {/* {role === 'ADMIN' && <AdminDashboard />} */}
       {!role && <p>Loading...</p>}
     </Layout>
   )

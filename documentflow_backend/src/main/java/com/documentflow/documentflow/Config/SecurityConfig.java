@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
                                 .requestMatchers("/auth/login", "/auth/register").permitAll()
-                                .requestMatchers("/api/user/**").hasAnyAuthority("USER", "REVIEWER", "ADMIN")
+                                .requestMatchers("/api/users/**","/api/documents/**").hasAnyAuthority("USER", "REVIEWER", "ADMIN")
                                 .requestMatchers("/api/reviews/**").hasAnyAuthority("REVIEWER", "ADMIN")
                                 .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                                 .anyRequest().authenticated()

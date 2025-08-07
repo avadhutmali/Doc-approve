@@ -15,8 +15,8 @@ export default function CreateDocument() {
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (!token) return navigate('/login')
-    const { userName } = jwt_decode(token)
-    setUsername(userName)
+    const { sub } = jwt_decode(token)
+    setUsername(sub)
   }, [navigate])
 
   const handleSubmit = async e => {
@@ -24,9 +24,8 @@ export default function CreateDocument() {
     try {
       await axios.post(
         'http://localhost:8081/api/documents/upload',
-        null,
+        { title, description, fileUrl, userName: username },
         {
-          params: { title, description, fileUrl, userName: username },
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         }
       )

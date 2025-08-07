@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.documentflow.documentflow.Entity.Enums.DocumentStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -64,5 +65,6 @@ public class Document {
     LocalDateTime localDateTime;
 
     @OneToMany(mappedBy = "document",cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Review> reviews;
 }
