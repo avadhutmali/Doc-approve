@@ -39,6 +39,11 @@ public class SecurityConfig {
                 .and()
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
+                                .requestMatchers(
+                                    "/v3/api-docs/**",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html"
+                                ).permitAll()
                                 .requestMatchers("/auth/login", "/auth/register").permitAll()
                                 .requestMatchers("/api/users/**","/api/documents/**").hasAnyAuthority("USER", "REVIEWER", "ADMIN")
                                 .requestMatchers("/api/reviews/**").hasAnyAuthority("REVIEWER", "ADMIN")
