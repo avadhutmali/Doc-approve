@@ -1,0 +1,26 @@
+# Use official Maven image to build the app
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+
+WORKDIR /app
+
+# Copy pom.xml and download dependencies first (caching layer)
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy the source code
+COPY src ./src
+
+# Package the app (skip tests for faster build)
+RUN mvn clean package -DskipTests
+
+# ----------------------
+# Run stage (smaller image)
+FROM eclipse-temurin:17-jdk-jammy
+
+WORKDIR /app
+
+# Copy jar from build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Run the app
+ENTRYPOINT ["java", "-jar", "app.jar"]
