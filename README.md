@@ -1,13 +1,12 @@
 
-# DocApprove 🧾✅
+# DocApprove 
 
 **DocApprove** is an online document verification portal that allows authorized users to upload, review, and track the status of submitted documents securely using JWT-based authentication.
 
-> 🚧 This project is under active development.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 - `Entity/` – JPA entity classes (`User`, `Document`, `Review`)
 - `Repository/` – Spring Data JPA interfaces
@@ -18,20 +17,20 @@
 
 ---
 
-## 🚀 Features
+## Features
 
-- ✅ JWT-based user authentication
-- ✅ Secure registration & login endpoints
-- 🔐 Token validation filter for protected routes
-- 🗂️ Upload and manage documents
-- 🧑‍💼 Review workflow with comments and decisions
-- 📜 Approval logs & status tracking
-- 📊 Dashboard for analytics (Planned)
-- 🧑‍⚖️ Role-based access control (Coming Soon)
+-  JWT-based user authentication
+-  Secure registration & login endpoints
+-  Token validation filter for protected routes
+-  Upload and manage documents
+-  Review workflow with comments and decisions
+-  Approval logs & status tracking
+-  Dashboard for analytics (Planned)
+-  Role-based access control (Coming Soon)
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - Java 17  
 - Spring Boot 3.5.x  
@@ -42,7 +41,7 @@
 
 ---
 
-## ⚙️ Setup (for Development)
+##  Setup (for Development)
 
 1. **Clone the repository:**
    ```bash
@@ -64,7 +63,7 @@
 
 ---
 
-## 🔑 Authentication Flow
+##  Authentication Flow
 
 - **Register:** `POST /register`  
   Registers a new user (password is securely encoded)
@@ -80,20 +79,7 @@
 
 ---
 
-## 📌 Current Status
-
-- [x] User entity with encoded password storage  
-- [x] JWT token generation & validation  
-- [x] Security filter chain + auth entrypoint  
-- [x] Document entity & basic upload logic  
-- [ ] Role-based access (in progress)  
-- [ ] Reviewer dashboard  
-- [ ] File storage & download  
-- [ ] Frontend (React.js) integration
-
----
-
-## 👤 Author
+##  Author
 
 **Avdhut Mali**  
 [GitHub](https://github.com/avadhutmali)
@@ -103,3 +89,4 @@
 ## 📜 License
 
 MIT License (or your preferred license)
+
