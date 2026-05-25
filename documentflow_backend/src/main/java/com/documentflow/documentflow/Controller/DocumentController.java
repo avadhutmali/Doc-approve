@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.documentflow.documentflow.Entity.Document;
 import com.documentflow.documentflow.Service.DocumentService;
@@ -28,13 +31,35 @@ public class DocumentController {
 
     @PostMapping("/upload")
     public ResponseEntity<Document> upload(
+        Authentication authentication,
         @RequestBody com.documentflow.documentflow.DTO.Document document
     ) {
+        // determine authenticated username
+        Object principal = authentication.getPrincipal();
+        String authUserName;
+        if (principal instanceof UserDetails) {
+            authUserName = ((UserDetails) principal).getUsername();
+        } else {
+            authUserName = principal.toString();
+        }
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> a.equals("ADMIN"));
+
+        String uploaderUserName = document.getUserName();
+        if (uploaderUserName == null || uploaderUserName.isBlank()) {
+            uploaderUserName = authUserName;
+        } else if (!uploaderUserName.equals(authUserName) && !isAdmin) {
+            // only admins can upload on behalf of someone else
+            return ResponseEntity.status(403).build();
+        }
+
         Document documentUpload = documentService.uploaDocument(
             document.getTitle(),
             document.getDescription(),
             document.getFileUrl(),
-            document.getUserName(),
+            uploaderUserName,
             document.getReviewerUserName()
         );
         return ResponseEntity.ok(documentUpload);
