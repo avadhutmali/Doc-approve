@@ -12,4 +12,5 @@ public class Document {
     private  String fileUrl;
     private String description;
     private String userName;
+    private String reviewerUserName;
 }

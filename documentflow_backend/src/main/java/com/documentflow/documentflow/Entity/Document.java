@@ -19,7 +19,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,15 +32,7 @@ import lombok.NoArgsConstructor;
 public class Document {
     
     @Id
-    @SequenceGenerator(
-        name = "documentSequence",
-        sequenceName = "documentSequence",
-        allocationSize = 1
-    )
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator ="documentSequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long documentId;
 
     @Column(nullable = false)
@@ -60,6 +51,10 @@ public class Document {
     @ManyToOne
     @JoinColumn(name = "uploaded_by", nullable = false)
     private User uploadedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_reviewer")
+    private User assignedReviewer;
     
     @CreationTimestamp
     LocalDateTime localDateTime;

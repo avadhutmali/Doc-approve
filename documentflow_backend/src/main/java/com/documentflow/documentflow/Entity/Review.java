@@ -15,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,14 +28,7 @@ import lombok.NoArgsConstructor;
 public class Review {
     
     @Id
-    @SequenceGenerator(
-        name = "reviewSequence",
-        sequenceName = "reviewSequence"
-    )
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "reviewSequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
     @ManyToOne

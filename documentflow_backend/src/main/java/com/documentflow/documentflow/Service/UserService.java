@@ -35,4 +35,10 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("User Not Found"));
     }
+
+    public User changeUserRole(String userName, String newRole){
+        User user = userRepository.findByUserName(userName).orElseThrow(()-> new EntityNotFoundException("User Not Found"));
+        user.setRole(newRole);
+        return userRepository.save(user);
+    }
 }

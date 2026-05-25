@@ -1,92 +1,108 @@
-
-# DocApprove 
+# DocApprove
 
 **DocApprove** is an online document verification portal that allows authorized users to upload, review, and track the status of submitted documents securely using JWT-based authentication.
-
 
 ---
 
 ## Project Structure
 
-- `Entity/` – JPA entity classes (`User`, `Document`, `Review`)
-- `Repository/` – Spring Data JPA interfaces
-- `Service/` – Business logic layer (User, Document, Review services)
-- `Controller/` – REST APIs for user registration, authentication, and document workflow
-- `Security/` – JWT token-based Spring Security configuration
-- `resources/` – `application.properties`, static files
+- `documentflow_backend/` – Spring Boot backend (REST APIs, JWT, JPA)
+- `documentflow_frontend/` – React frontend (Vite, Tailwind, role-based UI)
 
 ---
 
 ## Features
 
--  JWT-based user authentication
--  Secure registration & login endpoints
--  Token validation filter for protected routes
--  Upload and manage documents
--  Review workflow with comments and decisions
--  Approval logs & status tracking
--  Dashboard for analytics (Planned)
--  Role-based access control (Coming Soon)
+- JWT-based user authentication
+- Secure registration & login endpoints
+- Token validation filter for protected routes
+- Upload and manage documents
+- Review workflow with comments and decisions
+- Approval logs & status tracking
+- Role-based access control
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
-- Java 17  
-- Spring Boot 3.5.x  
-- Spring Security (with JWT)  
-- MySQL  
-- Maven  
-- (Planned) React.js frontend
+- Java 21
+- Spring Boot 3.5.x
+- Spring Security (JWT)
+- PostgreSQL
+- Maven
+- React 18 + Vite + Tailwind
 
 ---
 
-##  Setup (for Development)
+## Setup (Development)
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/doc-approve.git
-   cd doc-approve
+### Backend (PostgreSQL)
+
+1. **Create database and user** (password: `1629`):
+
+   ```sql
+   CREATE DATABASE documentflow;
+   CREATE USER documentflow_user WITH PASSWORD '1629';
+   GRANT ALL PRIVILEGES ON DATABASE documentflow TO documentflow_user;
    ```
 
-2. **Configure your MySQL database in `application.properties`:**
+2. **Configure database** in `documentflow_backend/src/main/resources/application.properties` (already added):
+
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/documentflow
-   spring.datasource.username=root
-   spring.datasource.password=your-password
+   spring.datasource.url=jdbc:postgresql://localhost:5432/documentflow
+   spring.datasource.username=documentflow_user
+   spring.datasource.password=1629
    ```
 
-3. **Run the application:**
+3. **Run the backend**:
+
    ```bash
+   cd documentflow_backend
    ./mvnw spring-boot:run
    ```
 
+### Frontend
+
+1. **Install dependencies**:
+
+   ```bash
+   cd documentflow_frontend
+   npm install
+   ```
+
+2. **Run the frontend**:
+
+   ```bash
+   npm run dev
+   ```
+
 ---
 
-##  Authentication Flow
+## Authentication Flow
 
-- **Register:** `POST /register`  
-  Registers a new user (password is securely encoded)
+- **Register:** `POST /auth/register`
+- **Login:** `POST /auth/login`
+- **Protected Endpoints:**
 
-- **Login:** `POST /login`  
-  Returns a JWT token upon valid credentials
-
-- **Protected Endpoints:**  
-  Pass token as Bearer in `Authorization` header:
   ```
   Authorization: Bearer <your-jwt-token>
   ```
 
 ---
 
-##  Author
+## Notes
 
-**Avdhut Mali**  
-[GitHub](https://github.com/avadhutmali)
+- Frontend uses role-based dashboards (USER/REVIEWER/ADMIN).
+- If you previously stored tokens as `token`, clear localStorage and log in again.
 
 ---
 
-## 📜 License
+## Author
+
+**Avdhut Mali**
+
+---
+
+## License
 
 MIT License (or your preferred license)
-

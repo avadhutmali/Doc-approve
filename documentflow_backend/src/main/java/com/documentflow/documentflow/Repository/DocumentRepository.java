@@ -13,5 +13,6 @@ import com.documentflow.documentflow.Entity.Enums.DocumentStatus;
 public interface DocumentRepository extends JpaRepository<Document,Long>{
     List<Document> findByUploadedByUserName(String username);
     List<Document> findByStatus(DocumentStatus status);
+    List<Document> findByStatusAndAssignedReviewerUserName(DocumentStatus status, String reviewerUserName);
 }
 

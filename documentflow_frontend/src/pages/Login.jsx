@@ -1,41 +1,98 @@
 import { useState } from 'react'
-import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
+import { authApi } from '../api/auth.api'
+import { useAuth } from '../hooks/useAuth'
+import { validateLoginForm } from '../utils/validators'
+import Toast from '../components/common/Toast'
+import Button from '../components/common/Button'
+import Input from '../components/common/Input'
+import Card from '../components/common/Card'
 
 export default function Login() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [formData, setFormData] = useState({ username: '', password: '' })
+  const [errors, setErrors] = useState({})
+  const [loading, setLoading] = useState(false)
+  const [toast, setToast] = useState(null)
   const navigate = useNavigate()
+  const { login } = useAuth()
 
-  const handleSubmit = async e => {
-    e.preventDefault()
-    const res = await axios.post('http://localhost:8081/auth/login', { userName: username, password })
-    localStorage.setItem('token', res.data.token)
-    navigate('/dashboard')
+  const handleChange = event => {
+    const { name, value } = event.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }))
+    }
+  }
+
+  const handleSubmit = async event => {
+    event.preventDefault()
+
+    const formErrors = validateLoginForm(formData.username, formData.password)
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors)
+      return
+    }
+
+    setLoading(true)
+    try {
+      const response = await authApi.login(formData.username, formData.password)
+      login(response.data.token)
+      setToast({ type: 'success', message: 'Login successful. Redirecting...' })
+      setTimeout(() => navigate('/dashboard'), 800)
+    } catch (error) {
+      const message = error.response?.data?.message || 'Invalid username or password'
+      setToast({ type: 'error', message })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl mb-4">Login</h2>
-        <input 
-          className="w-full p-2 mb-3 border rounded" 
-          placeholder="Username"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
-        <input 
-          type="password"
-          className="w-full p-2 mb-4 border rounded" 
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <button className="w-full bg-blue-600 text-white py-2 rounded">Login</button>
-        <p className="mt-4 text-center">
-          <Link className="text-blue-500" to="/register">Register</Link>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">
+      {toast && <Toast {...toast} onClose={() => setToast(null)} />}
+
+      <Card className="w-full max-w-sm">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">DocApprove</h1>
+          <p className="text-gray-600">Document Approval System</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            label="Username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="Enter your username"
+            error={errors.username}
+            disabled={loading}
+            required
+          />
+
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Enter your password"
+            error={errors.password}
+            disabled={loading}
+            required
+          />
+
+          <Button type="submit" fullWidth loading={loading} disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </Button>
+        </form>
+
+        <p className="text-center mt-6 text-gray-600">
+          Do not have an account?{' '}
+          <Link to="/register" className="text-blue-600 font-semibold hover:underline">
+            Register here
+          </Link>
         </p>
-      </form>
+      </Card>
     </div>
   )
 }

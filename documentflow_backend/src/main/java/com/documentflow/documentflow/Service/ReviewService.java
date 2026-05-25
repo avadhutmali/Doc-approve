@@ -3,6 +3,8 @@ package com.documentflow.documentflow.Service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import com.documentflow.documentflow.Entity.Document;
 import com.documentflow.documentflow.Entity.Review;
@@ -14,8 +16,6 @@ import com.documentflow.documentflow.Repository.ReviewRepository;
 import com.documentflow.documentflow.Repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,9 +34,20 @@ public class ReviewService {
     }
 
     public Review reviewDocument(Long documentId,String reviewerUserName,String comment,ReviewDecision decision){
+        if(reviewerUserName == null || reviewerUserName.isBlank()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reviewer username is required");
+        }
 
         Document document = documentRepository.findById(documentId).orElseThrow(()-> new EntityNotFoundException("Document Not Found"));
         User reviewer = userRepository.findByUserName(reviewerUserName).orElseThrow(()-> new EntityNotFoundException("UserName not found"));
+
+        if(document.getStatus() != DocumentStatus.PENDING){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Document is already reviewed");
+        }
+
+        if(document.getAssignedReviewer() == null || !document.getAssignedReviewer().getUserName().equals(reviewerUserName)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only the assigned reviewer can review this document");
+        }
 
         Review review = Review.builder()
                         .reviewer(reviewer)

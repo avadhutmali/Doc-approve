@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.documentflow.documentflow.Entity.Document;
@@ -29,7 +30,13 @@ public class DocumentController {
     public ResponseEntity<Document> upload(
         @RequestBody com.documentflow.documentflow.DTO.Document document
     ) {
-        Document documentUpload = documentService.uploaDocument(document.getTitle(),document.getDescription(), document.getFileUrl(),document.getUserName());
+        Document documentUpload = documentService.uploaDocument(
+            document.getTitle(),
+            document.getDescription(),
+            document.getFileUrl(),
+            document.getUserName(),
+            document.getReviewerUserName()
+        );
         return ResponseEntity.ok(documentUpload);
     }
 
@@ -39,8 +46,8 @@ public class DocumentController {
     }
 
     @GetMapping("/pending")
-    public ResponseEntity<List<Document>> gePendingDocuments() {
-        return ResponseEntity.ok(documentService.getPendingDocuments());
+    public ResponseEntity<List<Document>> gePendingDocuments(@RequestParam(required = false) String reviewerUserName) {
+        return ResponseEntity.ok(documentService.getPendingDocuments(reviewerUserName));
     }
 
     @GetMapping("/{id}")
